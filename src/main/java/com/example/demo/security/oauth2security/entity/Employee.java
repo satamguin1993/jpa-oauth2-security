@@ -4,18 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -33,14 +22,19 @@ public class Employee {
     @JsonProperty(required = true)
     private String name;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "departmentId", nullable = false)
-    @JsonProperty(required = true)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "department_id", referencedColumnName = "department_id")
     private Department department;
 
-    @Column
+    @Column(name = "salary")
     @JsonProperty
     private Integer salary;
+
+    @Column(nullable = false)
+    @JsonProperty(required = true)
+    private Boolean isActive;
+
+
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @CollectionTable(joinColumns = @JoinColumn(name = "addressId"))
